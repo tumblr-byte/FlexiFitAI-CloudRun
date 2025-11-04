@@ -1,0 +1,110 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Home{% endblock %}</title>           
+
+  <!-- Favicon -->
+  <link rel="icon" href="{% static 'logo.png' %}" sizes="64x64" type="image/png">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="{% static 'home/index.css' %}">  
+  
+               
+ 
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" 
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+</head>   
+<body>  
+
+  <!-- Navbar -->
+<!-- Navbar -->
+<header>
+  <nav class="navbar">
+    <!-- Logo + App Name -->
+    <div class="logo" style="display:flex; align-items:center; gap:12px;">
+      <img src="{% static 'logo.png' %}" alt="Logo">
+      <span class="app-name">FlexiFit-AI</span>
+    </div>
+
+    <!-- Navigation Icons -->
+    <ul class="nav-icons">
+
+      <!-- Profile Dropdown -->
+      <li class="nav-item profile">
+        <img src="{% if visitor.profile_photo %}{{ visitor.profile_photo.url }}{% else %}{% static 'img1.png' %}{% endif %}" 
+             alt="Profile">
+
+        <!-- Animated Dropdown Panel -->
+        <div class="profile-dropdown">
+          <div class="dropdown-header">
+            <span>Menu</span>
+            <i class="fa-solid fa-xmark close-dropdown"></i>
+          </div> 
+          
+
+           <a href="{% url 'home' %}">
+        <i class="fa-solid fa-house">Home</i>
+    </a>
+
+    <a href="{% url 'chat_page' %}">   
+  <i class="fa-solid fa-comments"></i> Chat
+</a>
+
+ <a href="{% url 'ex:ai_coach' %}">
+  <i class="fa-solid fa-dumbbell"></i> Workout
+</a>
+
+<a href="{% url 'journal' %}">
+  <i class="fa-solid fa-book-medical"></i> Health Journal
+</a>
+
+
+
+
+
+
+        <a href="{% url 'health_tracker' visitor.id %}">
+  <i class="fa-solid fa-bars-progress"></i> Progress
+</a>
+
+
+   
+
+
+
+        
+        </div>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+
+  <!-- Main content -->
+  <main>
+    {% block content %}
+    {% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer> 
+    {% block footer %}
+    <p style="text-align:center; padding:10px;">&copy; 2025 FlexiFit-AI</p>
+    {% endblock %}
+  </footer> 
+
+ <script src="{% static 'home/index4.js' %}"></script>
+</body>
+</html>
+

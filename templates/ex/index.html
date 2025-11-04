@@ -1,0 +1,53 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Coach Setup</title>
+  <link rel="icon" href="{% static 'logo.png' %}" sizes="64x64" type="image/png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'ex/style.css' %}">
+</head>    
+<body>     
+
+  <!-- Home Icon -->
+  <a href="{% url 'home' %}" class="home-icon" title="Home">
+    <i class="fa-solid fa-house"></i>
+  </a>
+  
+  <div class="container">
+    <!-- Left side: AI Coach form -->
+    <form method="POST">
+      {% csrf_token %}
+      <h2><i class="fa-solid fa-dumbbell"></i> AI Coach</h2>
+      {{ form.as_p }}
+      <button type="submit">{% if coach %}Update{% else %}Save{% endif %}</button>
+
+      {% if message %}
+        <div class="message">{{ message }}</div>
+      {% endif %}
+    </form>
+
+    <!-- Right side: Recommendations -->
+    {% if visitor %}
+      <div class="recommendation">
+        <h3>Recommended Exercises for {{ visitor.get_health_condition_display }}</h3>
+        <div class="exercise-list">
+          {% for exercise in exercises %}
+            <div class="exercise-card">
+              <a href="{% url 'ex:exercise_detail' exercise %}">
+                <img src="{% static 'images/'|add:exercise|add:'.jpg' %}" alt="{{ exercise }}">
+                <p>{{ exercise|title }}</p>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
+</body>
+</html>
+  

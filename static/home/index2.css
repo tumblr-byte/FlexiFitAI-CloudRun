@@ -1,0 +1,19 @@
+ :root {
+      --theme-color: #dbe271;
+    }
+    body {
+      background-color: #f9fafb;
+      font-family: 'Poppins', sans-serif;
+      transition: background-color 0.5s ease, color 0.5s ease;
+    }
+    .card {
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+      padding: 1.5rem;
+      transition: background 0.5s ease;
+    }
+    .theme-text { color: var(--theme-color); }
+    .dark body { background-color: #111827; color: #f9fafb; }
+    .dark .card { background-color: #1f2937; color: #f9fafb; }
+    .dark .theme-text { color: #dbe271; }

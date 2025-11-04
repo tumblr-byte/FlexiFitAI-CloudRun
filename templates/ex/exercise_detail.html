@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ exercise.title }}</title>
+    <link rel="icon" href="{% static 'logo.png' %}" sizes="64x64" type="image/png">
+    <!-- Google Fonts - Roboto -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+      <link rel="stylesheet" href="{% static 'ex/style2.css' %}">
+  
+</head>
+<body>
+
+<div class="container">
+    <!-- Home Icon -->
+    <a href="{% url 'home' %}" class="home-icon" title="Home">
+        <i class="fa-solid fa-house"></i>
+    </a>
+
+    <!-- Title -->
+    <h1>{{ exercise.title }}</h1>
+
+    <div class="content-wrapper">
+        <!-- Left Section: Image, Info, Button -->
+        <div class="left-section">
+            <img src="{% static exercise.image %}" alt="{{ exercise.title }}" class="exercise-image">
+            
+            <div class="workout-info">
+                <div class="info-badge">
+                    <div class="label">Rounds</div>
+                    <div class="value">{{ exercise.rounds }}</div>
+                </div>
+                <div class="info-badge">
+                    <div class="label">Duration</div>
+                    <div class="value">{{ exercise.duration }}s</div>
+                </div>
+            </div>
+
+  
+
+ 
+        </div>
+
+        <!-- Right Section: Details -->
+        <div class="right-section">
+            <p class="intro">{{ exercise.intro }}</p>
+
+            <div class="section">
+                <h2>How to Do It</h2>
+                <ul>
+                    {% for step in exercise.how_to %}
+                        <li>{{ step }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>Benefits of This Exercise</h2>
+                <ul>
+                    {% for benefit in exercise.benefits %}
+                        <li>{{ benefit }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Modified Version Note (only for Standard_Tree) -->
+            {% if name == "Standard_Tree" %}
+                <div class="modified-note">
+                    <p><strong>Tip:</strong> You can try the <a href="{% url 'ex:exercise_detail' 'Modified_Tree' %}">Modified Tree Pose</a> to improve your balance gradually before attempting this standard version.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

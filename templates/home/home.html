@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<!-- Inspirational Line Below Navbar -->
+<div class="tagline-container" style="width:100%; text-align:center; margin-top:40px; margin-bottom:30px;">
+  <h2 class="tagline-text"
+      style="font-size:1.8rem; color:#444444c6; font-weight:500; letter-spacing:1px;">
+    Your health deserves understanding, not judgment.
+  </h2>
+</div>
+
+<!-- Main Content -->
+<div class="home-container" style="display:flex; justify-content:center; align-items:center; gap:40px; padding:60px; flex-wrap:wrap;">
+
+  <!-- Health Image -->
+  <div class="image-section">
+    <img src="{% static 'img1.png' %}"
+         alt="Health Condition Image"
+         style="width:400px; height:400px; object-fit:cover; border-radius:20px;">
+  </div>
+
+  <!-- Dynamic Message -->
+  <div class="text-section" style="max-width:500px; font-size:1.1rem; line-height:1.8; color:#333;">
+
+    <!-- User Name and Health Condition -->
+    <h1 style="font-size:1.8rem; margin-bottom:10px;">Welcome, {{ visitor.name }} 🌸</h1>
+    <h3 style="color:#555; font-weight:500; margin-bottom:25px;">
+      Your selected health focus: 
+      <span style="color:#1976d2; text-transform:capitalize;">
+        {{ visitor.get_health_condition_display }}
+      </span>
+    </h3>
+
+    {% if visitor.health_condition == 'breast_cancer' %}
+      <h2 style="color:#c2185b;">🌷 FlexiFit AI stands beside you.</h2>
+      <p>Every small step you take is a victory. We’ll guide you with gentle, safe movements that rebuild strength and restore confidence.</p>
+      <p>Your journey matters and you never walk it alone.</p>
+
+      <!-- Purpose Section for Breast Cancer -->
+      <div class="platform-purpose" style="margin-top:35px; font-size:1rem; color:#444;">
+        <h2 style="color:#c2185b; font-size:1.4rem; margin-bottom:10px;">What is FlexiFit AI? 🌷</h2>
+        <ul style="list-style-type:none; padding-left:0;">
+          <li>• A kind, judgment-free space to move at your own pace.</li>
+          <li>• A health journal to record progress, energy, and daily feelings.</li>
+          <li>• Live exercise feedback  modify moves when you need ease.</li>
+          <li>• An AI coach that truly listens and supports you with care.</li>
+          <li>• A gentle way to rebuild strength, mind, and body together.</li>
+        </ul>
+      </div>
+
+    {% elif visitor.health_condition == 'thyroid' %}
+      <h2 style="color:#6a1b9a;">🪻 Balance begins with understanding.</h2>
+      <p>FlexiFit AI helps you find calm and consistency through mindful workouts and steady routines that fit your rhythm.</p>
+      <p>We guide you toward harmony one small mindful move at a time.</p>
+
+      <!-- Purpose Section for Thyroid -->
+      <div class="platform-purpose" style="margin-top:35px; font-size:1rem; color:#444;">
+        <h2 style="color:#6a1b9a; font-size:1.4rem; margin-bottom:10px;">What is FlexiFit AI? ✨</h2>
+        <ul style="list-style-type:none; padding-left:0;">
+          <li>• Your balanced companion — track energy, emotions, and progress.</li>
+          <li>• A private journal to understand your body’s rhythm.</li>
+          <li>• Smart guidance that adjusts to your energy levels daily.</li>
+          <li>• A calm AI coach who keeps you consistent, not pressured.</li>
+          <li>• Workouts that bring harmony to your mind and body.</li>
+        </ul>
+      </div>
+
+    {% elif visitor.health_condition == 'PCOS/PCOD' %}
+      <h2 style="color:#00897b;">🪷 We understand your struggle.</h2>
+      <p>FlexiFit AI supports you with adaptive workouts and nutrition reminders that nurture balance and confidence.</p>
+      <p>Progress isn’t about perfection it’s about care, patience, and growth.</p>
+
+      <!-- Purpose Section for PCOS/PCOD -->
+      <div class="platform-purpose" style="margin-top:35px; font-size:1rem; color:#444;">
+        <h2 style="color:#00897b; font-size:1.4rem; margin-bottom:10px;">What is FlexiFit AI? 💫</h2>
+        <ul style="list-style-type:none; padding-left:0;">
+          <li>• A safe space to track symptoms, moods, and cycles.</li>
+          <li>• A supportive health journal to understand patterns over time.</li>
+          <li>• Smart exercise tracking modify or switch moves easily.</li>
+          <li>• A chatty AI coach with your vibe Gen-Z tone, warm & real.</li>
+          <li>• Designed to empower you, not pressure you.</li>
+        </ul>
+      </div>
+
+    {% elif visitor.health_condition == 'general_health' %}
+      <h2 style="color:#1976d2;">🌿 Your wellness, your way.</h2>
+      <p>Every woman’s body has its own rhythm  and that’s what makes it beautiful. FlexiFit AI helps you understand, not compare.</p>
+      <p>Here, you’ll find balance, motivation, and a space that celebrates your progress big or small.</p>
+
+      <!-- Purpose Section for General Health -->
+      <div class="platform-purpose" style="margin-top:35px; font-size:1rem; color:#444;">
+        <h2 style="color:#1976d2; font-size:1.4rem; margin-bottom:10px;">What is FlexiFit AI? 🌼</h2>
+        <ul style="list-style-type:none; padding-left:0;">
+          <li>• A gentle wellness space built to fit your unique lifestyle.</li>
+          <li>• Track daily habits, emotions, workouts, and self-care goals.</li>
+          <li>• Get AI-guided exercises that match your mood and energy.</li>
+          <li>• A supportive coach who grows with you, not judges you.</li>
+          <li>• Because your health journey is personal and perfectly yours.</li>
+        </ul>
+      </div>
+
+    {% else %}
+      <h2 style="color:#1976d2;"> Every woman deserves to feel her best.</h2>
+      <p>FlexiFit AI is your wellness buddy uplifting, caring, and tuned to your pace.</p>
+      <p>Here, growth feels gentle, real, and made just for you.</p>
+
+      <!-- Generic Purpose Section -->
+      <div class="platform-purpose" style="margin-top:35px; font-size:1rem; color:#444;">
+        <h2 style="color:#1976d2; font-size:1.4rem; margin-bottom:10px;">What is FlexiFit AI?</h2>
+        <ul style="list-style-type:none; padding-left:0;">
+          <li>• A private, judgment-free space to care for yourself.</li>
+          <li>• Track your health journey symptoms, workouts, emotions.</li>
+          <li>• A fitness tracker that evolves with your comfort.</li>
+          <li>• A relatable AI coach supportive, fun, and human-like.</li>
+          <li>• Live exercise feedback with easy alternatives.</li>
+        </ul>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- GSAP Animation for Tagline -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    gsap.from(".tagline-text", {
+      duration: 1.5,
+      y: -30,
+      opacity: 0,
+      ease: "power3.out"
+    });
+  });
+</script>
+
+{% endblock %}

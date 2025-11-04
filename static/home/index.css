@@ -1,0 +1,169 @@
+/* Reset and basics */
+
+
+
+body, html {
+  margin: 0;
+  padding: 0;
+   font-family: "Roboto", sans-serif;
+ background: linear-gradient(#ffff,#f8ffe56f, #9cb05f55);
+
+}
+  
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffffcc;
+  padding: 10px 30px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  position: relative;
+  z-index: 10;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.logo img {
+  height: 50px;
+}
+
+/* Profile image */
+.nav-item.profile img {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid #dbe271;
+  object-fit: cover;
+  margin-right:40px;
+}
+
+.nav-item.profile img:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+}
+
+.nav-icons {
+  display: flex;
+  list-style: none; /* ✅ removes black dot */
+  gap: 25px;
+  align-items: center;
+  margin: 0; /* ✅ remove default spacing */
+  padding: 0;
+}
+
+/* App name beside logo */
+/* App name beside logo */
+.app-name {
+  font-family: 'Roboto', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+
+  /* Gradient Text */
+  background: linear-gradient(90deg, #353ba8, #dbe271, #b5c500);
+
+  /* Standard property for compatibility */
+  background-clip: text;
+  -webkit-background-clip: text;
+
+  /* For making the text color transparent to show the gradient */
+  color: transparent;            /* Standard fallback */
+  -webkit-text-fill-color: transparent;
+
+  text-shadow: 0 0 10px rgba(181, 197, 0, 0.4),
+               0 0 20px rgba(181, 197, 0, 0.3);
+  transition: all 0.4s ease;
+  cursor: default;
+}
+
+.app-name:hover {
+  transform: scale(1.08);
+  text-shadow: 0 0 15px rgba(181, 197, 0, 0.7),
+               0 0 30px rgba(219, 226, 113, 0.6);
+}
+
+
+
+
+/* Dropdown container */
+.profile-dropdown {
+  position: absolute;
+  top: 65px;
+  right: 40px;
+  background: rgba(255,255,255,0.97);
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  backdrop-filter: blur(8px);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  min-width: 230px;
+  z-index: 100;
+}
+
+/* Dropdown header */
+.dropdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #dbe271;
+  color: #fff;
+  padding: 12px 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.close-dropdown {
+  cursor: pointer;
+  font-size: 18px;
+  transition: transform 0.2s ease;
+}
+
+.close-dropdown:hover {
+  transform: rotate(90deg) scale(1.1);
+}
+
+/* Dropdown links */
+.profile-dropdown a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 15px;
+  transition: all 0.25s ease;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.profile-dropdown a:last-child {
+  border-bottom: none;
+}
+
+/* Icons */
+.profile-dropdown a i {
+  font-size: 18px;
+  color: #dbe271;
+  width: 25px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+/* Hover effects */
+.profile-dropdown a:hover {
+  background: linear-gradient(90deg, #fafafa, #f0f0f0);
+  transform: translateX(5px);
+}
+
+.profile-dropdown a:hover i {
+  color: #b5c500;
+  transform: scale(1.15);
+}

@@ -1,0 +1,263 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ visitor.name }}'s Health Tracker</title>
+  <link rel="icon" href="{% static 'logo.png' %}" sizes="64x64" type="image/png">
+  <!-- Chart.js + Tailwind -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'home/index2.css' %}">
+</head>
+
+<body class="min-h-screen p-8 transition-all">
+
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-10">
+    <div class="flex items-center">
+      <img src="{{ visitor.profile_photo.url }}" class="w-24 h-24 rounded-full border-4 border-[var(--theme-color)] mr-6 animate-pulse">
+      <div>
+        <h1 class="text-3xl font-bold">{{ visitor.name }}</h1>
+        <p class="text-gray-600 capitalize">{{ visitor.get_health_condition_display }}</p>
+      </div>
+    </div>
+
+    <!-- Dark Mode Toggle -->
+    <button id="toggleDark" class="theme-bg text-gray-900 font-semibold px-4 py-2 rounded-lg shadow-md hover:opacity-90 transition">
+      🌙 Dark Mode
+    </button>
+  </div>
+
+  <!-- Quick Stats -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+    <div class="card animate-fade-in">
+      <h2 class="text-lg font-semibold mb-2">Average Weight</h2>
+      <p class="text-3xl font-bold theme-text">
+        {% if health_entries %}
+          {{ health_entries.last.weight }} kg
+        {% else %}
+          No data
+        {% endif %}
+      </p>
+    </div>
+    <div class="card animate-fade-in">
+      <h2 class="text-lg font-semibold mb-2">Recent Energy</h2>
+      <p class="text-3xl font-bold theme-text">
+        {% if health_entries %}
+          {{ health_entries.last.energy }}
+        {% else %}
+          No data
+        {% endif %}
+      </p>
+    </div>
+    <div class="card animate-fade-in">
+      <h2 class="text-lg font-semibold mb-2">Exercise Sessions</h2>
+      <p class="text-3xl font-bold theme-text">{{ exercise_sessions.count }}</p>
+    </div>
+    <!-- Health Score Ring -->
+    <div class="card animate-fade-in">
+      <h2 class="text-lg font-semibold mb-2">Overall Health Score</h2>
+      <canvas id="healthScoreChart" width="150" height="150"></canvas>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
+    <!-- Weight Chart -->
+    <div class="card">
+      <h2 class="text-xl font-semibold mb-4">Weight Progress</h2>
+      <canvas id="weightChart"></canvas>
+    </div>
+
+    <!-- Energy Chart -->
+    <div class="card">
+      <h2 class="text-xl font-semibold mb-4">Energy Levels Over Time</h2>
+      <canvas id="energyChart"></canvas>
+    </div>
+
+    <!-- Pose Accuracy Chart -->
+    <div class="card">
+      <h2 class="text-xl font-semibold mb-4">Exercise Pose Accuracy</h2>
+      <canvas id="poseChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Symptom Log -->
+  <div class="card mb-10">
+    <h2 class="text-xl font-semibold mb-4">Recent Health Notes</h2>
+    <ul class="space-y-2 text-gray-700">
+      {% for entry in health_entries %}
+        <li class="border-b border-gray-200 pb-2">
+          <span class="font-semibold">{{ entry.created_at.date }}</span>:
+          {{ entry.symptoms|default:"No symptoms noted" }} –
+          <em>{{ entry.energy|default:"N/A" }}</em>
+        </li>
+      {% empty %}
+        <li>No health entries yet.</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <!-- AI Insights -->
+  <div class="card animate-fade-in">
+    <h2 class="text-xl font-semibold mb-4">AI Health Insights</h2>
+    {% if weight_data|length > 1 %}
+      {% with last=health_entries.last first=health_entries.first %}
+        {% if last.weight < first.weight %}
+          <p class="text-green-600 font-medium">
+            👏 Great progress! Your weight has decreased from {{ first.weight }} kg to {{ last.weight }} kg.
+          </p>
+        {% elif last.weight > first.weight %}
+          <p class="text-yellow-600 font-medium">
+            ⚖️ Your weight has increased from {{ first.weight }} kg to {{ last.weight }} kg — watch your meals and activity.
+          </p>
+        {% else %}
+          <p class="text-gray-600 font-medium">🔄 Your weight is stable. Consistency is good!</p>
+        {% endif %}
+      {% endwith %}
+    {% else %}
+      <p class="text-gray-500">Not enough data for AI insights yet.</p>
+    {% endif %}
+  </div>
+
+  <!-- ===== Chart Script (Inline so Django data renders properly) ===== -->
+  <script>
+    Chart.defaults.animation.duration = 1500;
+    Chart.defaults.animation.easing = 'easeInOutQuart';
+
+    const weightData = {{ weight_data|safe }};
+    const energyData = {{ energy_data|safe }};
+    const poseData = {{ pose_accuracy_data|safe }};
+
+    // --- Weight Chart ---
+    new Chart(document.getElementById('weightChart'), {
+      type: 'line',
+      data: {
+        labels: weightData.map(d => d.date),
+        datasets: [{
+          label: 'Weight (kg)',
+          data: weightData.map(d => d.weight),
+          borderColor: '#dbe271',
+          tension: 0.3,
+          fill: true,
+          backgroundColor: 'rgba(219,226,113,0.2)',
+          pointRadius: 4,
+          pointHoverRadius: 6,
+        }]
+      },
+      options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+    });
+
+    // --- Energy Chart ---
+    new Chart(document.getElementById('energyChart'), {
+      type: 'bar',
+      data: {
+        labels: energyData.map(d => d.date),
+        datasets: [{
+          label: 'Energy Level',
+          data: energyData.map(d => d.energy === 'High' ? 3 : (d.energy === 'Medium' ? 2 : 1)),
+          backgroundColor: '#dbe271',
+          borderRadius: 8,
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            ticks: {
+              callback: value => ['','Low','Medium','High'][value],
+              stepSize: 1,
+            },
+            beginAtZero: true,
+            max: 3
+          }
+        },
+        plugins: { legend: { display: false } }
+      }
+    });
+
+    // --- Pose Accuracy Chart ---
+    new Chart(document.getElementById('poseChart'), {
+      type: 'bar',
+      data: {
+        labels: poseData.map(d => d.date + " (" + d.pose + ")"),
+        datasets: [{
+          label: 'Pose Accuracy (%)',
+          data: poseData.map(d => d.confidence),
+          backgroundColor: 'rgba(219,226,113,0.8)',
+          borderRadius: 8,
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100,
+            title: { display: true, text: 'Confidence (%)' }
+          }
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: ctx => `Accuracy: ${ctx.parsed.y.toFixed(1)}%` } }
+        }
+      }
+    });
+
+    // --- Health Score Chart (Doughnut) ---
+    const avgEnergy = energyData.length
+      ? energyData.map(d => d.energy === 'High' ? 100 : d.energy === 'Medium' ? 70 : 40).reduce((a,b)=>a+b,0)/energyData.length
+      : 50;
+    const avgPose = poseData.length
+      ? poseData.map(d => d.confidence).reduce((a,b)=>a+b,0)/poseData.length
+      : 50;
+    const overallScore = Math.round((avgEnergy + avgPose) / 2);
+
+    new Chart(document.getElementById('healthScoreChart'), {
+      type: 'doughnut',
+      data: {
+        datasets: [{
+          data: [overallScore, 100 - overallScore],
+          backgroundColor: ['#dbe271', '#e5e7eb'],
+          borderWidth: 0,
+        }]
+      },
+      options: {
+        cutout: '70%',
+        plugins: {
+          tooltip: { enabled: false },
+          legend: { display: false },
+          beforeDraw: (chart) => {
+            const { ctx, chartArea } = chart;
+            ctx.save();
+            ctx.font = 'bold 18px Poppins';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = '#374151';
+            ctx.fillText(overallScore + '%', chartArea.width / 2, chartArea.height / 2);
+            ctx.restore();
+          }
+        }
+      }
+    });
+
+    // --- Dark Mode Toggle ---
+    const toggleBtn = document.getElementById('toggleDark');
+    toggleBtn.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+      toggleBtn.textContent = document.documentElement.classList.contains('dark') ? '☀️ Light Mode' : '🌙 Dark Mode';
+    });
+  </script>
+
+
+
+  <!-- Animation Utility -->
+  <style>
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in { animation: fade-in 1s ease-in-out; }
+  </style>
+
+</body>
+</html>

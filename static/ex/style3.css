@@ -1,0 +1,107 @@
+   body {
+      font-family: "Roboto", sans-serif;
+      background: #fff;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+   .home-icon {
+    position: fixed;
+    top: 30px;      /* slightly above the chat content */
+    left: 30px;     /* near the left side */
+    font-size: 28px;
+    color: #dae27188; /* your requested color */
+    text-decoration: none;
+    z-index: 1000;  /* keep it above everything */
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.home-icon:hover {
+    transform: scale(1.1);
+    color: #c9cf60; /* slightly darker hover effect */
+}
+
+    #wrap {
+      display: flex;
+      align-items: flex-start;
+      gap: 28px;
+    }
+
+    canvas {
+      border-radius: 12px;
+      background: #f9fafb;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+
+    .panel {
+      width: 340px;
+      padding: 20px;
+      border-radius: 12px;
+      background: rgba(219, 226, 113, 0.1);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+      border: 1px solid rgba(219, 226, 113, 0.3);
+    }
+
+    .coachName {
+      font-size: 22px;
+      font-weight: 600;
+      color: #2d2d2d;
+      margin-bottom: 6px;
+    }
+
+    .personality {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 12px;
+    }
+
+    .circle {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      margin: 0 auto;
+    }
+
+    .circle svg {
+      transform: rotate(-90deg);
+    }
+
+    .center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    #motivation {
+      text-align: center;
+      color: #777700;
+      font-weight: 500;
+      min-height: 48px;
+      margin-top: 12px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px 14px;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      background: #dbe271;
+      color: #222;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 10px;
+    }
+
+    button:hover { background: #e9ec9c; }
+    #stopBtn { background: #ef4444; color: white; display: none; }
+    #stopBtn:hover { background: #dc2626; }

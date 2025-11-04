@@ -1,0 +1,84 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ ai_name }} Chat</title>
+      <link rel="icon" href="{% static 'logo.png' %}" sizes="64x64" type="image/png">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+     <link rel="stylesheet" href="{% static 'chat/chat.css' %}">
+
+</head>
+<body>
+    <a href="{% url 'home' %}" class="home-icon" title="Home">
+  <i class="fa-solid fa-house"></i>
+</a>
+
+<div class="chat-wrapper">
+    <div class="sidebar">
+        <h3>Chats</h3>
+        <div class="sessions">
+            {% for s in sessions %}
+                <a href="{% url 'chat_page' s.id %}" class="session-item {% if s.id == session.id %}active{% endif %}">
+                    {{ s.created_at|date:"M d, H:i" }}
+                </a>
+            {% empty %}
+                <p style="text-align:center;color:#999;">No chats yet</p>
+            {% endfor %}
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" name="delete_chat">Delete Current Chat</button>
+        </form>
+        <form method="post">
+            {% csrf_token %}
+           <button type="submit" name="delete_all" class="delete-btn">Delete All Chats</button>
+
+<style>
+.delete-btn {
+    background: #d5d95d78;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-family: 'Roboto', sans-serif;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.delete-btn:hover {
+    background: #d5d95d; /* Changes color on hover */
+}
+</style>
+
+        </form>
+    </div>
+
+    <div class="chat-container">
+        <div class="chat-header">
+            <img src="{{ visitor.profile_photo.url|default:'/static/img1.png' }}" alt="User">
+            <div>
+                <strong>{{ ai_name }}</strong><br>
+                <small>{{ ai_personality }} Personality</small>
+            </div>
+        </div>
+
+        <div class="chat-messages">
+            {% for msg in messages %}
+                <div class="message {{ msg.role }}">{{ msg.text }}</div>
+            {% empty %}
+                <p style="text-align:center;color:#888;">No messages yet. Say hi!</p>
+            {% endfor %}
+        </div>
+
+        <form method="POST" class="chat-form">
+            {% csrf_token %}
+            {{ form.message }}
+            <button type="submit" name="send_message" class="send">Send</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

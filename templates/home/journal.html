@@ -1,0 +1,144 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Health Journal — {{ visitor.name }}</title>
+  <link rel="icon" href="{% static 'logo.png' %}" sizes="64x64" type="image/png">
+  <link rel="stylesheet" href="{% static 'home/journal.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>     
+ 
+  <!-- Top Bar -->
+  <div class="topbar">
+    <a href="/" class="home-icon" title="Home">
+      <i class="fa-solid fa-house"></i>
+    </a>
+    <div class="brand">
+      <h1>{{ visitor.name }}’s Health Journal</h1>
+      <p>Track your daily wellness and habits</p>
+    </div>
+  </div>
+
+  <div class="page">
+    <!-- Left: Form Section -->
+    <div>
+      {% if not entry_to_edit %}
+      <div class="card">
+        <h2><i class="fa-solid fa-plus-circle"></i> New Entry</h2>
+        <form method="post">
+          {% csrf_token %}
+          
+          <label class="field-label">Had Period?</label>
+          {{ form.had_period }}
+
+          <label class="field-label">Weight (kg)</label>
+          {{ form.weight }}
+
+          <label class="field-label">Energy</label>
+          {{ form.energy }}
+
+          <label class="field-label">Symptoms</label>
+          {{ form.symptoms }}
+
+          <label class="field-label">Activities</label>
+          {{ form.activities }}
+
+          <label class="field-label">Meals</label>
+          {{ form.meals }}
+
+          <label class="field-label">Notes</label>
+          {{ form.notes }}
+
+          <button type="submit" name="create_entry" class="btn btn-accent" style="margin-top:10px">
+            Save Entry
+          </button>
+        </form>
+      </div>
+      {% endif %}
+
+      {% if entry_to_edit %}
+      <div class="card">
+        <h2><i class="fa-solid fa-pen-to-square"></i> Edit Entry — {{ entry_to_edit.created_at|date:"M d, Y" }}</h2>
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="edit_entry_id" value="{{ entry_to_edit.id }}">
+
+          <label class="field-label">Had Period?</label>
+          {{ edit_form.had_period }}
+
+          <label class="field-label">Weight (kg)</label>
+          {{ edit_form.weight }}
+
+          <label class="field-label">Energy</label>
+          {{ edit_form.energy }}
+
+          <label class="field-label">Symptoms</label>
+          {{ edit_form.symptoms }}
+
+          <label class="field-label">Activities</label>
+          {{ edit_form.activities }}
+
+          <label class="field-label">Meals</label>
+          {{ edit_form.meals }}
+
+          <label class="field-label">Notes</label>
+          {{ edit_form.notes }}
+
+          <button type="submit" class="btn btn-accent" style="margin-top:10px">
+            <i class="fa-solid fa-check"></i> Save Changes
+          </button>
+          <a href="{% url 'journal' %}" class="btn btn-ghost" style="margin-left:8px">
+            <i class="fa-solid fa-xmark"></i> Cancel
+          </a>
+        </form>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Right: Entries List -->
+    <div>
+      <h2><i class="fa-solid fa-book-medical"></i> Entries</h2>
+      <div class="entries">
+        {% for e in entries %}
+        <div class="entry">
+          <div class="meta">
+            <strong><i class="fa-regular fa-calendar"></i> {{ e.created_at|date:"M d, Y" }}</strong>
+            {% if e.energy %}
+            <span class="chip chip-energy">
+              <i class="fa-solid fa-bolt"></i> {{ e.get_energy_display }}
+            </span>
+            {% endif %}
+          </div>
+
+          <p><strong>Period:</strong> {% if e.had_period %}Yes{% else %}No{% endif %}</p>
+          {% if e.weight %}
+          <p><strong>Weight:</strong> {{ e.weight }} kg</p>
+          {% endif %}
+          <p> <strong>Symptoms:</strong> {{ e.symptom_list|join:", " }}</p>
+          <p> <strong>Activities:</strong> {{ e.activities }}</p>
+          <p> <strong>Meals:</strong> {{ e.meals }}</p>
+          <p> <strong>Notes:</strong> {{ e.notes }}</p>
+
+          <div class="actions">
+            <a href="?edit={{ e.id }}" class="btn btn-ghost">
+              <i class="fa-solid fa-pen"></i> Edit
+            </a>
+            <form method="post" action="{% url 'delete' e.id %}" style="display:inline">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-ghost" style="color:#a00">
+                <i class="fa-solid fa-trash"></i> Delete
+              </button>
+            </form>
+          </div>
+        </div>
+        {% empty %}
+        <p class="small"><i class="fa-regular fa-face-smile-beam"></i> No entries yet. Add your first one on the left!</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
